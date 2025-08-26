@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Label from '../../components/Label.astro';
+import IntroSocial from '../../components/IntroSocial.astro';
+import Linkedin from '../../components/icons/Linkedin.astro';
+import Github from '../../components/icons/Github.astro';
+// import Bento from '../../components/icons/Bento.astro';
+import Behance from '../../components/icons/Behance.astro';
+import Mail from '../../components/icons/Mail.astro';
+import Suitcase from '../../components/icons/Suitcase.astro';
+import Experience from '../../components/Experience.astro';
+import SectionContainer from '../../components/SectionContainer.astro';
+import Projects from '../../components/Projects.astro';
+import  Code  from '../../components/icons/Code.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import About from '../../components/icons/About.astro';
+import AboutMe from '../../components/AboutMe.astro';
+---
+
+<Layout title="Porfolio de Yoel Lazarte - Desarrollador y Programador Web" description="2 years designing and developing websites while continuously learning new technologies. I focus on providing modern and responsive (mobile-first) designs.">
+	<main>
+		<SectionContainer id="home/">
+		<div class="flex flex-row items-center gap-4 mb-4">
+			<img src="../yoel.jpg" alt="Yoel Lazarte" class="rounded-full size-24">
+
+			<a href="https://www.linkedin.com/in/yoel-lazarte" target="_blank" rel="noopener">
+				<Label>Disponible para trabajar</Label>
+			  </a>
+		</div>
+		<h1 class="text-4xl font-semibold text-gray-800 sm:text-5xl dark:text-white mb-8">
+    		Hola, soy Yoel 
+  		</h1>
+		<h2 class="text-xl md:text-2xl text-wrap"><span class="text-blue-600 dark:text-blue-300">Desarrollador web junior</span> 
+		<!-- <span class="text-black dark:opacity-80 dark:text-white">diseñando y programando páginas web mientras aprendo, constantemente, nuevas tecnologías. Me centro en la creación</span> <span class="text-blue-600 dark:text-blue-300 opacity-100">de diseños modernos y responsivos (mobile-first).</span> -->
+		<span class="text-black dark:opacity-80 dark:text-white">con experiencia en proyectos personales y académicos.  <span class="text-blue-600 dark:text-blue-300 opacity-100">Trabajo con Vue.js, Firebase, React, PHP y Laravel</span>, creando aplicaciones modernas y funcionales. Busco seguir aprendiendo y aportar valor en cada proyecto</span> 
+		</h2>
+
+		<nav class="flex gap-2 mt-4 flex-wrap justify-center md:justify-start md:gap-6">
+				<IntroSocial href="https://www.linkedin.com/in/yoel-lazarte">
+					<Linkedin class="size-5 md:size-7"/>
+					LinkedIn
+				</IntroSocial>
+
+				<IntroSocial href="https://github.com/YoelLazarte">
+					<Github class="size-5 md:size-7"/>
+					GitHub
+				</IntroSocial>
+
+				<!-- <IntroSocial href="https://bento.me/valen-gasipi">
+					<Behance class="size-5 md:size-7"/>
+					Behance
+				</IntroSocial> -->
+
+				<IntroSocial href="mailto:joelnicolaslazarte@hotmail.com">
+					<Mail class="size-5 md:size-7"/>
+					joelnicolaslazarte@hotmail.com
+				</IntroSocial>
+		</nav>
+
+	</SectionContainer>
+
+		<SectionContainer id="experience/">
+			<SectionTitle>
+				<Suitcase class=""/>
+				Experiencia Laboral</SectionTitle>
+			<Experience/>
+		</SectionContainer>
+
+		<SectionContainer id="projects/">
+			<SectionTitle>
+				<Code class="size-6"/>
+				Proyectos</SectionTitle>
+				<Projects/>
+		</SectionContainer>
+
+		<SectionContainer id="about-me/">
+			<SectionTitle>
+				<About class="size-6"/>
+				Sobre Mi</SectionTitle>
+				<AboutMe/>
+		</SectionContainer>
+	</main>
+</Layout>

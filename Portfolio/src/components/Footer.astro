@@ -1,0 +1,33 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const currentYear = new Date().getFullYear()
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<footer
+  class="opacity-80 m-4 min-[375px]:pl-4 md:pl-0 mt-16 w-full mx-auto container lg:max-w-4xl md:max-w-2xl mb-10 flex justify-center"
+>
+  <div
+    class="rounded-lg w-full max-w-screen-xl mx-auto md:flex md:items-center md:justify-between py-4 "
+  >
+    <span class="text-sm sm:text-center text-blue-600 dark:text-blue-100"
+      >© {currentYear}
+      <a href="" class="hover:underline">Yoel Lazarte</a>
+    </span>
+    <ul
+      class="flex flex-wrap items-center mt-3 text-sm font-medium text-blue-900 dark:text-blue-100 sm:mt-0"
+    >
+      <li>
+        <a href="#about-me" class="hover:underline me-4 md:me-6">{t('footer.about-me')}</a>
+      </li>
+      <li>
+        <a id="contact" href="mailto:valentinogasipi@gmail.com" class="hover:underline"
+          >{t('footer.contact')}</a
+        >
+      </li>
+    </ul>
+  </div>
+</footer>

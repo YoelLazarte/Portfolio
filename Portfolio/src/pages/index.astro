@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Label from '../components/Label.astro';
+import IntroSocial from '../components/IntroSocial.astro';
+import Linkedin from '../components/icons/Linkedin.astro';
+import Github from '../components/icons/Github.astro';
+import Bento from '../components/icons/Bento.astro';
+import Mail from '../components/icons/Mail.astro';
+import Suitcase from '../components/icons/Suitcase.astro';
+import Experience from '../components/Experience.astro';
+import SectionContainer from '../components/SectionContainer.astro';
+import Projects from '../components/Projects.astro';
+import  Code  from '../components/icons/Code.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import About from '../components/icons/About.astro';
+import AboutMe from '../components/AboutMe.astro';
+---
+
+<Layout title="Porfolio de Valentino Gasipi - Desarrollador y Programador Web con 2 años de experiencia" description="2 years designing and developing websites while continuously learning new technologies. I focus on providing modern and responsive (mobile-first) designs.">
+	<main>
+		<SectionContainer id="home/">
+		<div class="flex flex-row items-center gap-4 mb-4 pt-8 sm:pt-0">
+			<img src="yoel.jpg" alt="Yoel Lazarte" class="rounded-full size-24">
+
+			<a href="https://www.linkedin.com/in/valentino-gasipi-470100252/" target="_blank" rel="noopener">
+				<Label>Available for hire</Label>
+			  </a>
+		</div>
+		<h1 class="text-4xl font-semibold text-gray-800 sm:text-5xl dark:text-white mb-8">
+    		Hey, I'm Yoel 
+  		</h1>
+		<h2 class="text-xl md:text-2xl text-wrap"><span class="text-blue-600 dark:text-blue-300">Junior web developer</span> 
+		<span class="text-black dark:opacity-80 dark:text-white">with experience in personal and academic projects. <span class="text-blue-600 dark:text-blue-300 opacity-100">I work with Vue.js, Firebase, React, PHP, and Laravel,</span> creating modern and functional applications. I am eager to keep learning and contribute value to every project.</span> 
+		</h2>
+
+		<nav class="flex gap-2 mt-4 flex-wrap justify-center md:justify-start md:gap-6">
+				<IntroSocial href="https://www.linkedin.com/in/yoel-lazarte">
+					<Linkedin class="size-5 md:size-7"/>
+					LinkedIn
+				</IntroSocial>
+
+				<IntroSocial href="https://github.com/YoelLazarte">
+					<Github class="size-5 md:size-7"/>
+					GitHub
+				</IntroSocial>
+
+				<!-- <IntroSocial href="https://bento.me/valen-gasipi">
+					<Bento class="size-5 md:size-7"/>
+					Bento
+				</IntroSocial> -->
+
+				<IntroSocial href="mailto:joelnicolaslazarte@hotmail.com">
+					<Mail class="size-5 md:size-7"/>
+					joelnicolaslazarte@hotmail.com
+				</IntroSocial>
+		</nav>
+
+	</SectionContainer>
+
+		<SectionContainer id="experience/">
+			<SectionTitle>
+				<Suitcase class=""/>
+				Work Experience</SectionTitle>
+			<Experience/>
+		</SectionContainer>
+
+		<SectionContainer id="projects/">
+			<SectionTitle>
+				<Code class="size-6"/>
+				Projects</SectionTitle>
+				<Projects/>
+		</SectionContainer>
+
+		<SectionContainer id="about-me/">
+			<SectionTitle>
+				<About class="size-6"/>
+				About Me</SectionTitle>
+				<AboutMe/>
+		</SectionContainer>
+	</main>
+</Layout>

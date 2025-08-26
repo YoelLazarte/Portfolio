@@ -1,0 +1,29 @@
+---
+ const personalImageAlt = "Valentino Gasipi Falabella"
+
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<article class="flex flex-col items-center justify-center gap-8 text-gray-700 dark:text-gray-300 md:flex-row">
+  <div
+    class="[&>p]:mb-4 [&>p>strong]:text-blue-500 dark:[&>p>strong]:text-blue-300 [&>p>strong]:font-normal  text-pretty order-2 md:order-1"
+  >
+    <p>
+      {t('p1')}<strong
+        >{t('strong1')}</strong
+        > {t('p2')} <strong>{t('strong2')}</strong>
+    </p>
+
+    <p> {t('p3')} <strong>{t('strong3')}</strong></p> 
+
+    <p> {t('p4')} <strong>{t('strong4')}</strong> {t('p5')} </p> 
+    
+    <!-- <p> {t('p7')} </p> -->
+  </div>
+
+  <img width="200" height="200" src="/yo.jpg" alt={personalImageAlt} class="order-1 object-cover w-64 h-full p-1 md:order-2 rotate-3 lg:p-2 lg:w-64 aspect-square rounded-2xl bg-blue-500/20 dark:bg-sky-500/40 hover:rotate-12 transition-all " style="object-position: 50% 50%">
+
+</article>

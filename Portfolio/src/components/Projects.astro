@@ -1,0 +1,171 @@
+---
+import GitHub from "./icons/Github.astro"
+import Tailwind from "./icons/Tailwind.astro"
+import Link from "./icons/Link.astro"
+import LinkButton from "./LinkButton.astro"
+import Laravel from "./icons/Laravel.astro"
+import JavaScript from "./icons/JavaScript.astro"
+import Vue from "./icons/Vue.astro"
+import Bootstrap from "./icons/Bootstrap.astro"
+import Vuetify from "./icons/Vuetify.astro"
+import Typescript from "./icons/Typescript.astro"
+import Figma from "./icons/Figma.astro"
+import Firebase from "./icons/Firebase.astro"
+
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+
+const TAGS = {
+  TAILWIND: {
+    name: "Tailwind CSS",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Tailwind,
+  },
+  LARAVEL: {
+    name: "Laravel",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Laravel,
+  },
+  JAVASCRIPT: {
+    name: "JavaScript",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: JavaScript,
+  },
+  VUE: {
+    name: "Vue",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Vue,
+  },
+  BOOTSTRAP: {
+    name: "Bootstrap CSS",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Bootstrap,
+  },
+  VUETIFY: {
+    name: "Vuetify",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Vuetify,
+  },
+  FIGMA: {
+    name: "Figma",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Figma,
+  },
+  FIREBASE: {
+    name: "Firebase",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Firebase,
+  },
+  TYPESCRIPT: {
+    name: "Typescript",
+    class: "bg-blue-300/30 text-black dark:text-white dark:bg-blue-400/30",
+    icon: Typescript,
+  }
+}
+const PROJECTS = [
+  {
+    title: t('project.reemo.title'),
+    description: t('project.reemo.description'),
+    link: "https://reemo-a8120.web.app/",
+    image: "/projects/reemo.png",
+    button: t('project.reemo.link'),
+    tags: [TAGS.VUE, TAGS.FIREBASE,TAGS.TAILWIND ],
+  },
+  {
+    title: t('project.old-money.title'),
+    description: t('project.old-money.description'),
+    link: "#",
+    github: "https://github.com/YoelLazarte/old-money",
+    image: "/projects/old-money.jpg",
+    button: t('project.old-money.link'),
+    buttonGithub: t('project.old-money.github'),
+    tags: [TAGS.LARAVEL, TAGS.TAILWIND],
+  },
+  {
+    title: t('project.netflix.title'),
+    description: t('project.netflix.description'),
+    link: "https://yoellazarte.github.io/Netflix/",
+    github: "https://github.com/YoelLazarte/Netflix.git",
+    image: "/projects/Netflix.png",
+    button: t('project.netflix.link'),
+    buttonGithub: t('project.netflix.github'),
+    tags: [TAGS.JAVASCRIPT, TAGS.TAILWIND],
+  },
+  {
+    title: t('project.js-cart.title'),
+    description: t('project.js-cart.description'),
+    link: "https://yoellazarte.github.io/sneaker-shop/",
+    github: "https://github.com/YoelLazarte/sneaker-shop",
+    image: "/projects/js-cart.jpg",
+    button: t('project.js-cart.link'),
+    buttonGithub: t('project.js-cart.github'),
+    tags: [TAGS.JAVASCRIPT, TAGS.BOOTSTRAP],
+  },
+  {
+    title: t('project.foda.title'),
+    description: t('project.foda.description'),
+    link: "https://www.figma.com/proto/Zz7LpfVcCS5I27f5237BwO/Untitled?node-id=71-1953&t=yx6HzQ3JTCX6ihJA-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1",
+    image: "/projects/foda.png",
+    button: t('project.foda.link'),
+    tags: [TAGS.FIGMA],
+  },
+];
+
+---
+
+<div class="flex flex-col gap-y-16 ">
+  {
+    PROJECTS.map(({ image, title, description, tags, link, github, button, buttonGithub }) => (
+      <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
+        <div class="w-full md:w-1/2">
+          <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
+            <img alt="Project Image" class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="lazy" src={image} />
+          </div>
+        </div>
+
+        <div class="w-full md:w-1/2 md:max-w-xl">
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+            {title}
+          </h3>
+          <div class="flex flex-wrap mt-2">
+            <ul class="flex flex-row mb-2 gap-x-2">
+              {tags.map((tag) => (
+                <li>
+                  <span
+                    class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
+                  >
+                    <tag.icon class="size-4" />
+                    {tag.name}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div class="mt-2 text-gray-700 dark:text-gray-400">
+              {description} 
+            </div>
+            <footer class="flex items-end justify-start mt-4 gap-x-4">
+              {github && (
+                <LinkButton href={github}>
+                  <GitHub class="size-6" />
+                  {buttonGithub}
+                </LinkButton>
+              )}
+              {link && (
+                <LinkButton href={link} target="_blank">
+                  <Link class="size-4" />
+                  {button}
+                </LinkButton>
+              )}
+            </footer>
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+
+
