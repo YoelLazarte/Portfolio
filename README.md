@@ -134,7 +134,7 @@ Have questions or want to collaborate? Reach out to me:
 
 - **Email**: joelnicolaslazarte@hotmail.com
 - **LinkedIn**: [Yoel Lazarte](https://www.linkedin.com/in/yoel-lazarte/)
-- **Portfolio**: [My Portfolio]("https://yoelnicolaslazarte.vercel.app/")
+- **Portfolio**: [My Portfolio]("https://yoellazarte-portfolio.netlify.app/")
 
 ---
 
