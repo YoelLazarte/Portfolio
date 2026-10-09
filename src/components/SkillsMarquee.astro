@@ -1,0 +1,27 @@
+---
+import { technologies, tools } from '../data/skills';
+
+const row1 = [...technologies, ...technologies];
+const row2 = [...tools, ...tools];
+---
+
+<section class="max-w-shell mx-auto px-[18px] md:px-[25px] py-2.5 pb-7" aria-label="Stack y herramientas">
+  <div class="overflow-hidden mb-2.5 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+    <div class="flex gap-2.5 w-max animate-marquee">
+      {row1.map(t => (
+        <span class="inline-flex items-center gap-1.5 border border-line rounded-full px-2.5 py-1 font-ui text-xs font-medium text-ink-secondary whitespace-nowrap">
+          <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style={`background:${t.color}`}></span>{t.name}
+        </span>
+      ))}
+    </div>
+  </div>
+  <div class="overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+    <div class="flex gap-2.5 w-max animate-marquee-reverse">
+      {row2.map(t => (
+        <span class="inline-flex items-center gap-1.5 border border-line rounded-full px-2.5 py-1 font-ui text-xs font-medium text-ink-secondary whitespace-nowrap">
+          <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style={`background:${t.color}`}></span>{t.name}
+        </span>
+      ))}
+    </div>
+  </div>
+</section>

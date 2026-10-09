@@ -1,3 +1,12 @@
-<h2 class="{...Astro.props} text-2xl font-semibold mb-6 flex gap-x-2 items-center text-gray-800 dark:text-white">
-    <slot/>
+---
+interface Props {
+  id?: string;
+}
+const { id } = Astro.props;
+---
+
+<h2 class="relative inline-block font-ui text-[1.1rem] font-semibold text-ink mb-5 px-0.5" id={id}>
+  <span class="absolute w-2 h-2 border border-line-hover -top-1.5 -left-2 border-r-0 border-b-0"></span>
+  <slot />
+  <span class="absolute w-2 h-2 border border-line-hover -bottom-1.5 -right-2 border-l-0 border-t-0"></span>
 </h2>

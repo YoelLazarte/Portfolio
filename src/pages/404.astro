@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="404 — Yoel Lazarte">
+  <Navbar />
+  <main>
+    <section class="max-w-shell mx-auto px-[18px] min-h-[60vh] flex flex-col items-center justify-center text-center gap-2.5">
+      <p class="font-ui font-bold text-[clamp(3.5rem,12vw,8rem)] leading-none text-ink m-0 tracking-tight animate-glow">404</p>
+      <h1 class="font-ui text-[1.3rem] text-ink m-0">Esta página no existe</h1>
+      <p class="font-body text-[0.9rem] text-ink-dim mb-3.5">El link puede estar roto o la página se movió.</p>
+      <a href="/" class="font-ui text-[0.85rem] font-medium bg-surface-card border border-line rounded-lg2 px-5 py-2.5 shadow-btn hover:border-line-hover transition-colors duration-200">
+        Volver al inicio
+      </a>
+    </section>
+  </main>
+  <Footer />
+</Layout>

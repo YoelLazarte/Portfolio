@@ -1,0 +1,20 @@
+---
+import Icon from './Icon.astro';
+---
+
+<section class="max-w-shell mx-auto px-[18px] md:px-[25px] py-2">
+  <a href="https://levn.com.ar" target="_blank" rel="noopener"
+    class="dash-box group flex items-center justify-between gap-5 p-5 flex-col xs:flex-row items-start xs:items-center">
+    <div>
+      <p class="font-ui text-[0.7rem] font-semibold text-brand-blue uppercase tracking-wide m-0 mb-1">Proyecto destacado</p>
+      <h3 class="font-ui text-[1.3rem] font-bold text-ink m-0 mb-1.5">LEVN</h3>
+      <p class="font-body text-[0.85rem] text-ink-secondary leading-relaxed m-0 max-w-[46ch]">
+        La agencia de servicios tecnológicos que estoy construyendo junto a socios: automatizaciones,
+        marketing, programación y CRM para PyMEs.
+      </p>
+    </div>
+    <span class="flex-shrink-0 w-[34px] h-[34px] rounded-full flex items-center justify-center bg-surface-card border border-line text-ink transition-transform duration-300 group-hover:translate-x-1">
+      <Icon name="arrow-right" size={15} />
+    </span>
+  </a>
+</section>

@@ -1,0 +1,39 @@
+---
+const GITHUB_USERNAME = 'YoelLazarte';
+---
+
+<div class="mt-1" data-username={GITHUB_USERNAME}>
+  <p class="font-ui text-xs text-ink-dim mb-2.5">Actividad en GitHub</p>
+  <div id="gh-cal-grid" class="flex flex-wrap gap-[3px] min-h-[60px]" aria-live="polite">
+    <p class="font-body text-[0.8rem] text-ink-dim">Cargando contribuciones…</p>
+  </div>
+</div>
+
+<script>
+  const container = document.getElementById('gh-cal-grid');
+  const username = document.querySelector('[data-username]')?.getAttribute('data-username');
+  const levels = ['#383838', '#606060', '#8C8C8C', '#BABABA', '#EBEBEB'];
+
+  async function loadCalendar() {
+    if (!container || !username) return;
+    try {
+      const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+      if (!res.ok) throw new Error('fetch failed');
+      const data = await res.json();
+      const contributions: { date: string; count: number; level: number }[] = data.contributions || [];
+      const recent = contributions.slice(-91);
+      container.innerHTML = '';
+      recent.forEach((day) => {
+        const el = document.createElement('div');
+        el.className = 'w-2.5 h-2.5 rounded-sm2 relative';
+        el.style.background = levels[day.level] ?? levels[0];
+        el.setAttribute('data-tooltip', `${day.count} contribuciones — ${day.date}`);
+        container.appendChild(el);
+      });
+    } catch {
+      container.innerHTML = '<p class="font-body text-[0.8rem] text-ink-dim">No se pudo cargar el calendario ahora mismo.</p>';
+    }
+  }
+
+  loadCalendar();
+</script>

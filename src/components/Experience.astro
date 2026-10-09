@@ -1,27 +1,18 @@
 ---
-import ExperienceItems from "./ExperienceItems.astro"
-
-const experience = [
-    {
-        title: 'Mancruz - Burdeos Dogos',
-        date: 'February 2024',
-        description: 'This is my first and unique work experience at the moment. It is a website for a dog breeder. It is a simple website with a lot of information about the breed and the dogs. It is a static website built with HTML, CSS, some JS and Bootstrap.',
-        link: 'https://mancruz.vercel.app/',
-        badge: 'Latest Project'
-    }
-      
-]
+import SectionTitle from './SectionTitle.astro';
+import ExperienceCard from './ExperienceCard.astro';
+import GithubCalendar from './GithubCalendar.astro';
+import { experienceEntries } from '../data/experience';
 ---
 
+<section class="max-w-shell mx-auto px-[18px] md:px-[25px] py-2" id="experiencia">
+  <SectionTitle>Experiencia</SectionTitle>
 
-<ol class="relative border-s border-blue-400 dark:border-gray-700 ml-3">     
-    
-    {
-        experience.map((experience) => (
-             <li class="mb-10 ms-6">            
-                <ExperienceItems {...experience} />
-            </li>
-        ))
-    }
-</ol>
+  <div class="mb-6">
+    {experienceEntries.map((entry, i) => (
+      <ExperienceCard entry={entry} isLast={i === experienceEntries.length - 1} />
+    ))}
+  </div>
 
+  <GithubCalendar />
+</section>

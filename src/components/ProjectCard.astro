@@ -1,0 +1,33 @@
+---
+import Icon from './Icon.astro';
+import type { ProjectData } from '../data/projects';
+
+interface Props {
+  project: ProjectData;
+}
+const { project } = Astro.props;
+---
+
+<article class="dash-box p-4">
+  <div class="flex items-center justify-between mb-1.5">
+    <h3 class="font-ui text-[1.1rem] font-semibold text-ink m-0">{project.name}</h3>
+    <span class="font-ui text-[0.65rem] text-ink-dim">{project.status}</span>
+  </div>
+  <p class="font-body text-[0.85rem] text-ink-secondary leading-relaxed mb-3">{project.desc}</p>
+  <div class="flex flex-wrap gap-1.5 mb-3.5">
+    {project.tech.map(t => <span class="font-mono text-[0.7rem] text-ink-tertiary bg-surface-elevated rounded-md2 px-2 py-0.5">{t}</span>)}
+  </div>
+  <div class="flex gap-3.5">
+    {project.github && (
+      <a href={project.github} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 font-ui text-[0.78rem] font-medium text-ink-dim hover:text-ink transition-colors duration-200">
+        <Icon name="github" size={13} /> Código
+      </a>
+    )}
+    {project.live && (
+      <a href={project.live} target="_blank" rel="noopener" data-tooltip={project.demoWarning ? 'El demo puede tardar en cargar' : undefined}
+        class="inline-flex items-center gap-1.5 font-ui text-[0.78rem] font-medium text-ink-dim hover:text-ink transition-colors duration-200">
+        <Icon name="external" size={13} /> Demo
+      </a>
+    )}
+  </div>
+</article>

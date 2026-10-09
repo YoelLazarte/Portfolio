@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Footer from '../components/Footer.astro';
+import { allProjects } from '../data/projects';
+---
+
+<Layout title="Proyectos — Yoel Lazarte">
+  <Navbar />
+  <main>
+    <section class="max-w-shell mx-auto px-[18px] md:px-[25px] pt-8">
+      <SectionTitle>Todos los proyectos</SectionTitle>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        {allProjects.map(p => <ProjectCard project={p} />)}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
