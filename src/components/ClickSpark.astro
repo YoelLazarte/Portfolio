@@ -1,0 +1,71 @@
+---
+/**
+ * Canvas particle burst on every click, drawn over the whole page.
+ * Port of manixh's ClickSpark: same defaults, no React.
+ */
+interface Props {
+  sparkColor?: string;
+  sparkSize?: number;
+  sparkRadius?: number;
+  sparkCount?: number;
+  duration?: number;
+}
+const { sparkColor = '#ffffff', sparkSize = 10, sparkRadius = 15, sparkCount = 8, duration = 400 } = Astro.props;
+---
+
+<canvas id="click-spark" aria-hidden="true" class="fixed inset-0 w-full h-full pointer-events-none z-[2000]"
+  data-config={JSON.stringify({ sparkColor, sparkSize, sparkRadius, sparkCount, duration })}></canvas>
+
+<script>
+  interface Spark { x: number; y: number; angle: number; start: number }
+
+  const canvas = document.getElementById('click-spark') as HTMLCanvasElement | null;
+  const ctx = canvas?.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (canvas && ctx && !reduceMotion) {
+    const cfg = JSON.parse(canvas.dataset.config ?? '{}');
+    let sparks: Spark[] = [];
+    let raf = 0;
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const easeOut = (t: number) => t * (2 - t);
+
+    const draw = (now: number) => {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      sparks = sparks.filter((s) => {
+        const elapsed = now - s.start;
+        if (elapsed >= cfg.duration) return false;
+        const eased = easeOut(elapsed / cfg.duration);
+        const distance = eased * cfg.sparkRadius;
+        const length = cfg.sparkSize * (1 - eased);
+        const x1 = s.x + distance * Math.cos(s.angle);
+        const y1 = s.y + distance * Math.sin(s.angle);
+        ctx.strokeStyle = cfg.sparkColor;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x1 + length * Math.cos(s.angle), y1 + length * Math.sin(s.angle));
+        ctx.stroke();
+        return true;
+      });
+      raf = sparks.length ? requestAnimationFrame(draw) : 0;
+    };
+
+    document.addEventListener('click', (e) => {
+      const start = performance.now();
+      for (let i = 0; i < cfg.sparkCount; i++) {
+        sparks.push({ x: e.clientX, y: e.clientY, angle: (2 * Math.PI * i) / cfg.sparkCount, start });
+      }
+      if (!raf) raf = requestAnimationFrame(draw);
+    });
+  }
+</script>

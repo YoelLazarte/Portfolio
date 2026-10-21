@@ -1,27 +1,39 @@
 ---
-import ExperienceItems from "./ExperienceItems.astro"
-
-const experience = [
-    {
-        title: 'Mancruz - Burdeos Dogos',
-        date: 'February 2024',
-        description: 'This is my first and unique work experience at the moment. It is a website for a dog breeder. It is a simple website with a lot of information about the breed and the dogs. It is a static website built with HTML, CSS, some JS and Bootstrap.',
-        link: 'https://mancruz.vercel.app/',
-        badge: 'Latest Project'
-    }
-      
-]
+import SectionTitle from './SectionTitle.astro';
+import ExperienceCard from './ExperienceCard.astro';
+import GithubCalendar from './GithubCalendar.astro';
+import { experienceEntries } from '../data/experience';
 ---
 
+<section class="max-w-shell mx-auto px-[18px] md:px-[25px] py-2" id="experiencia">
+  <SectionTitle>Experiencia</SectionTitle>
 
-<ol class="relative border-s border-blue-400 dark:border-gray-700 ml-3">     
-    
-    {
-        experience.map((experience) => (
-             <li class="mb-10 ms-6">            
-                <ExperienceItems {...experience} />
-            </li>
-        ))
-    }
-</ol>
+  <div class="mb-6">
+    {experienceEntries.map((entry, i) => (
+      <ExperienceCard entry={entry} index={i} isExpanded={i === 0} isLast={i === experienceEntries.length - 1} />
+    ))}
+  </div>
 
+  <GithubCalendar />
+</section>
+
+<script>
+  // Accordion: only one experience card open at a time
+  const cards = document.querySelectorAll<HTMLElement>('[data-exp-card]');
+
+  function setExpanded(card: HTMLElement, open: boolean) {
+    card.querySelector('button')?.setAttribute('aria-expanded', String(open));
+    card.querySelector('[data-exp-chevron]')?.classList.toggle('rotate-180', open);
+    const panel = card.querySelector('[data-exp-panel]');
+    panel?.classList.toggle('grid-rows-[1fr]', open);
+    panel?.classList.toggle('grid-rows-[0fr]', !open);
+    panel?.toggleAttribute('inert', !open);
+  }
+
+  cards.forEach((card) => {
+    card.querySelector('button')?.addEventListener('click', () => {
+      const willOpen = card.querySelector('button')?.getAttribute('aria-expanded') !== 'true';
+      cards.forEach((c) => setExpanded(c, c === card && willOpen));
+    });
+  });
+</script>

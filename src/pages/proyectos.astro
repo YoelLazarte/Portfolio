@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Footer from '../components/Footer.astro';
+import { allProjects } from '../data/projects';
+---
+
+<Layout title="Proyectos — Yoel Lazarte">
+  <Navbar />
+  <main>
+    <section class="max-w-shell mx-auto px-[18px] md:px-[25px] pt-8">
+      <div class="flex items-center justify-between mb-1">
+        <SectionTitle>Todos los proyectos</SectionTitle>
+        <a href="/#proyectos" class="group inline-flex items-center gap-1.5 font-ui text-[0.78rem] font-medium bg-surface-card border border-line rounded-sm2 px-3.5 py-1.5 shadow-sm2 hover:border-line-hover transition-colors duration-200">
+          <span class="transition-transform duration-300 group-hover:-translate-x-0.5">←</span> Volver
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        {allProjects.map(p => <ProjectCard project={p} />)}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>

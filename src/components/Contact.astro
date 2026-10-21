@@ -1,0 +1,20 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import Icon from './Icon.astro';
+import { socialLinks } from '../data/socialLinks';
+---
+
+<section class="max-w-shell mx-auto px-[18px] md:px-[25px] py-2" id="contacto">
+  <SectionTitle>Contacto</SectionTitle>
+  <p class="font-body text-[0.95rem] text-ink-secondary mb-[18px]">¿Tenés un proyecto, sistema o proceso que puede mejorar? Hablemos.</p>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+    {socialLinks.map(s => (
+      <a href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel="noopener"
+        data-reveal class="dash-box flex items-center gap-2 p-3.5 font-ui text-[0.85rem] text-ink-secondary hover:text-ink">
+        <Icon name={s.icon} size={16} />
+        <span>{s.name}</span>
+      </a>
+    ))}
+  </div>
+</section>

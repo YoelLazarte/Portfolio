@@ -1,0 +1,66 @@
+---
+import type { ExperienceEntry } from '../data/experience';
+
+interface Props {
+  entry: ExperienceEntry;
+  index: number;
+  isLast?: boolean;
+  isExpanded?: boolean;
+}
+const { entry, index, isLast = false, isExpanded = false } = Astro.props;
+
+const status = {
+  present: { label: 'Actual', text: 'text-state-active bg-state-activebg', dot: 'bg-state-active shadow-[0_0_0_4px_rgba(2,255,103,0.5)] animate-pulse-dot' },
+  past: { label: 'Anterior', text: 'text-state-past bg-state-pastbg', dot: 'bg-state-past shadow-[0_0_0_4px_rgba(255,51,51,0.5)]' },
+  future: { label: 'Próximo', text: 'text-state-future bg-state-futurebg', dot: 'bg-state-future shadow-[0_0_0_4px_rgba(255,170,0,0.5)]' },
+}[entry.status];
+const panelId = `exp-panel-${index}`;
+---
+
+<div class="flex gap-3.5" data-reveal>
+  <div class="flex flex-col items-center w-3 flex-shrink-0">
+    <span class={`w-2.5 h-2.5 rounded-full mt-[18px] flex-shrink-0 ${status.dot}`}></span>
+    {!isLast && <span class="flex-1 w-px border-l border-dashed border-[#555] mt-1"></span>}
+  </div>
+
+  <div class="dash-box flex-1 mb-4" data-exp-card>
+    <button type="button" aria-expanded={isExpanded ? "true" : "false"} aria-controls={panelId}
+      class="w-full text-left bg-transparent border-none cursor-pointer p-3.5 flex gap-3 items-start">
+      <span class="w-9 h-9 rounded-lg2 bg-surface-subtle border border-line flex-shrink-0 overflow-hidden flex items-center justify-center font-ui font-bold text-sm text-ink-secondary">
+        {entry.logoUrl ? <img src={entry.logoUrl} alt="" width="36" height="36" class="w-full h-full object-cover" /> : entry.company[0]}
+      </span>
+
+      <span class="flex-1 min-w-0">
+        <span class="flex items-center justify-between gap-2 mb-1">
+          <span class="font-ui font-semibold text-base text-ink leading-none">{entry.company}</span>
+          <span class={`font-ui text-[0.65rem] font-medium px-2 py-0.5 rounded-full ${status.text}`}>{status.label}</span>
+        </span>
+        <span class="block font-ui text-[0.85rem] text-state-role mb-0.5 font-medium">{entry.role}</span>
+        <span class="flex flex-wrap gap-x-2 font-mono text-xs text-ink-dim">
+          <span>{entry.dates}</span>
+          {entry.location && <><span class="text-ink-ghost">·</span><span>{entry.location}</span></>}
+        </span>
+      </span>
+
+      <svg data-exp-chevron width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"
+        class:list={['mt-1 flex-shrink-0 text-ink-dim transition-transform duration-300', isExpanded && 'rotate-180']}><path d="M6 9l6 6 6-6" /></svg>
+    </button>
+
+    <div id={panelId} data-exp-panel class:list={['grid transition-[grid-template-rows] duration-300 ease-out', isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]']} inert={!isExpanded}>
+      <div class="overflow-hidden">
+        <div class="px-3.5 pb-3.5">
+          <ul class="m-0 pl-4">
+            {entry.description.map(d => <li class="font-body text-sm text-ink-secondary leading-relaxed mb-1 marker:text-ink-muted">{d}</li>)}
+          </ul>
+          {entry.links && entry.links.length > 0 && (
+            <div class="mt-2 flex gap-2.5">
+              {entry.links.map(l => (
+                <a href={l.url} target="_blank" rel="noopener" class="font-ui text-[0.8rem] text-brand-blue hover:text-brand-bluehover">{l.label} ↗</a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

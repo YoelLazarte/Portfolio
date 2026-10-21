@@ -1,0 +1,35 @@
+---
+import * as simpleIcons from 'simple-icons';
+import { technologies, tools, type SkillItem } from '../data/skills';
+
+// Resolve icon paths at build time — no icon library ships to the browser
+const iconPath = (slug?: string) => {
+  if (!slug) return undefined;
+  const key = `si${slug[0].toUpperCase()}${slug.slice(1)}` as keyof typeof simpleIcons;
+  return (simpleIcons[key] as { path?: string } | undefined)?.path;
+};
+
+const withIcons = (items: SkillItem[]) => items.map((t) => ({ ...t, path: iconPath(t.icon) }));
+const rows = [
+  { items: withIcons(technologies), animation: 'animate-marquee', label: 'Tecnologías' },
+  { items: withIcons(tools), animation: 'animate-marquee-reverse', label: 'Herramientas' },
+];
+---
+
+<section class="max-w-shell mx-auto px-[18px] md:px-[25px] py-2.5 pb-7" aria-label="Stack y herramientas">
+  {rows.map((row, i) => (
+    <div class:list={['overflow-hidden group/marquee [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]', i === 0 && 'mb-2.5']}>
+      <ul class={`flex gap-2.5 w-max list-none m-0 p-0 ${row.animation} group-hover/marquee:[animation-play-state:paused]`} aria-label={row.label}>
+        {[...row.items, ...row.items].map((t, j) => (
+          <li aria-hidden={j >= row.items.length ? 'true' : undefined}
+            class="inline-flex items-center gap-1.5 border border-line rounded-full px-2.5 py-1 font-ui text-xs font-medium text-ink-secondary whitespace-nowrap tracking-[0.5px] hover:text-ink hover:border-line-hover transition-colors duration-200">
+            {t.path
+              ? <svg width="13" height="13" viewBox="0 0 24 24" fill={t.color} aria-hidden="true"><path d={t.path} /></svg>
+              : <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style={`background:${t.color}`}></span>}
+            {t.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</section>

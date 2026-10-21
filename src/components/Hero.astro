@@ -1,0 +1,116 @@
+---
+import Icon from './Icon.astro';
+import { heroSocialLinks } from '../data/socialLinks';
+import QRCode from 'qrcode';
+
+const WHATSAPP_URL = 'https://wa.me/5491158486166';
+// Rendered at build time, so the QR is a real scannable code with zero client JS
+const qrSvg = await QRCode.toString(WHATSAPP_URL, {
+  type: 'svg',
+  margin: 2,
+  color: { dark: '#ffffff', light: '#1a1b1c' },
+});
+---
+
+<section class="max-w-shell mx-auto px-[18px] md:px-[25px] pt-8 pb-2" id="top">
+  <div class="flex items-center gap-[18px] mb-[18px]">
+    <!-- Avatar / QR toggle -->
+    <div class="relative w-[120px] h-[120px] flex-shrink-0">
+      <div class="avatar-face absolute inset-0 rounded-lg border border-line overflow-hidden" data-face="avatar">
+        <img src="/yoel.jpg" alt="Foto de Yoel Lazarte" width="120" height="120" class="w-full h-full object-cover" />
+      </div>
+      <div class="avatar-face absolute inset-0 rounded-lg border border-line overflow-hidden [&>svg]:w-full [&>svg]:h-full"
+        data-face="qr" title="Escaneá para escribirme por WhatsApp" hidden set:html={qrSvg}></div>
+      <button id="qr-toggle" data-tooltip="QR de WhatsApp" aria-label="Alternar entre foto y código QR" aria-pressed="false"
+        class="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-surface-card border border-line text-ink-secondary flex items-center justify-center cursor-pointer hover:border-line-hover hover:text-ink transition-colors duration-200">
+        <Icon name="qrcode" size={13} />
+      </button>
+    </div>
+
+    <div>
+      <h1 class="font-ui text-2xl font-bold text-ink m-0">Yoel Lazarte</h1>
+      <p class="font-mono text-[0.8rem] text-ink-faint mt-0.5 mb-2">@yoellazarte</p>
+
+      <a href="https://levn.com.ar" target="_blank" rel="noopener" data-tooltip="Agencia propia"
+        class="inline-flex items-center gap-1.5 bg-state-activebg border border-state-active/30 text-state-active rounded-full px-2.5 py-1 font-ui text-xs font-medium mb-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-state-active shadow-[0_0_0_3px_rgba(2,255,103,0.5)] animate-pulse-dot"></span>
+        Construyendo LEVN
+        <Icon name="arrow-right" size={11} />
+      </a>
+
+      <div class="flex items-center flex-wrap gap-x-3 gap-y-1 font-ui text-[0.8rem] text-ink-muted">
+        <p class="flex items-center gap-1 m-0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-7.5 7-12.5a7 7 0 10-14 0C5 14.5 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          Buenos Aires, Argentina
+        </p>
+        <p class="flex items-center gap-1 m-0" data-tooltip="Mi hora local">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 2h4M12 14l3-3"/><circle cx="12" cy="14" r="8"/></svg>
+          <span id="hero-time" class="font-mono tabular-nums">--:--</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <ul class="list-none m-0 mb-5 p-0 flex flex-col gap-1.5 font-body text-[0.9rem] text-ink-secondary leading-relaxed">
+    <li class="flex items-start">
+      <span class="flex-shrink-0 w-1.5 h-1.5 mt-[9px] bg-ink-dim rounded-full"></span>
+      <span class="ml-3">
+        Desarrollador Full Stack Jr. con experiencia en proyectos reales.
+      </span>
+    </li>
+    <li class="flex items-start">
+      <span class="flex-shrink-0 w-1.5 h-1.5 mt-[9px] bg-ink-dim rounded-full"></span>
+      <span class="ml-3">
+        Me gusta resolver los problemas que aparecen en el camino hacia el desarrollo de un producto.
+      </span>
+    </li>
+    <li class="flex items-start">
+      <span class="flex-shrink-0 w-1.5 h-1.5 mt-[9px] bg-ink-dim rounded-full"></span>
+      <span class="ml-3">
+        Hoy construyendo LEVN, además de experiencia freelance y en Grownest.
+      </span>
+    </li>
+  </ul>
+
+  <div class="flex items-center justify-between flex-wrap gap-3.5 mb-[22px]">
+    <a href="mailto:yoelazarte04@gmail.com"
+      class="inline-flex items-center bg-surface-card text-ink rounded-lg2 px-5 py-2.5 font-ui text-[0.85rem] font-medium shadow-btn hover:shadow-btn-hover transition-shadow duration-300">
+      Enviar un email
+    </a>
+
+    <div class="flex gap-2">
+      {heroSocialLinks.map(s => (
+        <a href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel="noopener" data-tooltip={s.name}
+          class="w-[34px] h-[34px] rounded-full flex items-center justify-center bg-surface-card border border-line text-ink-secondary hover:border-line-hover hover:text-ink transition-colors duration-200">
+          <Icon name={s.icon} size={15} />
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 xs:grid-cols-2 gap-2.5">
+    <a href="https://linkedin.com/in/yoel-lazarte/" target="_blank" rel="noopener" class="dash-box p-3.5 text-ink-secondary hover:text-ink">
+      <p class="font-ui text-[0.7rem] font-semibold text-ink-dim uppercase tracking-wide m-0 mb-1">LinkedIn</p>
+      <p class="font-body text-[0.78rem] leading-snug m-0">Seguime para ver en qué estoy trabajando.</p>
+    </a>
+    <a href={WHATSAPP_URL} target="_blank" rel="noopener" class="dash-box p-3.5 flex items-center justify-center gap-2 font-ui text-[0.78rem] font-medium text-ink-secondary hover:text-ink">
+      <Icon name="whatsapp" size={16} />
+      <span>Hablemos por WhatsApp</span>
+    </a>
+  </div>
+</section>
+
+<script>
+  const toggle = document.getElementById('qr-toggle');
+  const faces = document.querySelectorAll<HTMLElement>('.avatar-face');
+  toggle?.addEventListener('click', () => {
+    faces.forEach((f) => { f.hidden = !f.hidden; });
+    toggle.setAttribute('aria-pressed', String(toggle.getAttribute('aria-pressed') !== 'true'));
+  });
+
+  const heroTime = document.getElementById('hero-time');
+  const fmt = new Intl.DateTimeFormat('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', hour: '2-digit', minute: '2-digit', hour12: false });
+  const updateTime = () => { if (heroTime) heroTime.textContent = `${fmt.format(new Date())} hs`; };
+  updateTime();
+  setInterval(updateTime, 30_000);
+</script>

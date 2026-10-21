@@ -1,0 +1,88 @@
+---
+const GITHUB_USERNAME = 'YoelLazarte';
+const levels = ['#383838', '#606060', '#8C8C8C', '#BABABA', '#EBEBEB'];
+---
+
+<div class="dash-box p-3.5 mt-1" data-username={GITHUB_USERNAME} data-reveal>
+  <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+    <p class="font-ui text-xs text-ink-dim m-0">
+      <span id="gh-cal-total" class="text-ink-secondary font-medium">—</span> contribuciones en el último año
+    </p>
+    <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener"
+      class="font-mono text-[0.7rem] text-ink-dim hover:text-ink transition-colors duration-200">@{GITHUB_USERNAME} ↗</a>
+  </div>
+
+  <!-- 53 week columns, scrolls horizontally on narrow screens and starts scrolled to the latest week -->
+  <div id="gh-cal-scroll" class="overflow-x-auto pb-1">
+    <div id="gh-cal-tip" role="tooltip" hidden
+      class="fixed z-50 pointer-events-none -translate-x-1/2 -translate-y-full bg-surface-card text-ink border border-line rounded-xl2 px-2 py-1 font-ui text-[0.7rem] whitespace-nowrap shadow-[0_6px_16px_rgba(0,0,0,0.25)] after:content-[''] after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:border-[5px] after:border-transparent after:border-t-line"></div>
+    <div id="gh-cal-grid" class="grid grid-rows-7 grid-flow-col auto-cols-[10px] gap-[3px] min-h-[88px] w-max" aria-live="polite">
+      <p class="font-body text-[0.8rem] text-ink-dim row-span-7">Cargando contribuciones…</p>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-1 mt-2 font-ui text-[0.65rem] text-ink-dim">
+    <span class="mr-1">Menos</span>
+    {levels.map(c => <span class="w-2.5 h-2.5 rounded-sm2" style={`background:${c}`}></span>)}
+    <span class="ml-1">Más</span>
+  </div>
+</div>
+
+<script is:inline define:vars={{ levels }}>
+  const container = document.getElementById('gh-cal-grid');
+  const scroller = document.getElementById('gh-cal-scroll');
+  const total = document.getElementById('gh-cal-total');
+  const username = document.querySelector('[data-username]')?.getAttribute('data-username');
+  const tip = document.getElementById('gh-cal-tip');
+  // Lives in <body> because the card's hover transform would break position: fixed
+  if (tip) document.body.appendChild(tip);
+  const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
+  const formatDate = (iso) => dateFmt.format(new Date(iso + 'T00:00:00'));
+
+  // One shared tooltip, positioned over whichever day cell is hovered
+  container?.addEventListener('mouseover', (e) => {
+    const cell = e.target.closest('[data-tip]');
+    if (!cell || !tip) return;
+    const r = cell.getBoundingClientRect();
+    tip.textContent = cell.dataset.tip;
+    tip.style.left = `${r.left + r.width / 2}px`;
+    tip.style.top = `${r.top - 8}px`;
+    tip.hidden = false;
+  });
+  container?.addEventListener('mouseleave', () => { if (tip) tip.hidden = true; });
+  const hideTip = () => { if (tip) tip.hidden = true; };
+  scroller?.addEventListener('scroll', hideTip);
+  window.addEventListener('scroll', hideTip, { passive: true });
+
+  async function loadCalendar() {
+    if (!container || !username) return;
+    try {
+      const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+      if (!res.ok) throw new Error('fetch failed');
+      const data = await res.json();
+      const contributions = data.contributions || [];
+      container.innerHTML = '';
+
+      // Pad the first column so each row lines up with a weekday (Sun → Sat)
+      const firstDay = contributions.length ? new Date(contributions[0].date + 'T00:00:00').getDay() : 0;
+      for (let i = 0; i < firstDay; i++) container.appendChild(document.createElement('div'));
+
+      let sum = 0;
+      contributions.forEach((day) => {
+        sum += day.count;
+        const el = document.createElement('div');
+        el.className = 'w-2.5 h-2.5 rounded-sm2';
+        el.style.background = levels[day.level] ?? levels[0];
+        el.dataset.tip = `${day.count} ${day.count === 1 ? 'contribución' : 'contribuciones'} · ${formatDate(day.date)}`;
+        container.appendChild(el);
+      });
+
+      if (total) total.textContent = (data.total?.lastYear ?? sum).toLocaleString('es-AR');
+      if (scroller) scroller.scrollLeft = scroller.scrollWidth;
+    } catch {
+      container.innerHTML = '<p class="font-body text-[0.8rem] text-ink-dim row-span-7">No se pudo cargar el calendario ahora mismo.</p>';
+    }
+  }
+
+  loadCalendar();
+</script>

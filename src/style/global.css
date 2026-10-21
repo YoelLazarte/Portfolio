@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 50px; }
+  body { @apply bg-surface text-ink-secondary font-body antialiased m-0; }
+  a { @apply text-inherit no-underline; }
+  img { @apply max-w-full block; }
+  ::selection { background: rgba(180, 180, 180, 0.3); }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+  ::-webkit-scrollbar-thumb { @apply bg-line-subtle rounded-[10px]; }
+  a:focus-visible, button:focus-visible { @apply outline outline-2 outline-line-hover outline-offset-2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer utilities {
+  /* lightweight tooltip primitive: <el data-tooltip="text"> */
+  [data-tooltip] { position: relative; }
+  [data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    @apply bg-surface-card text-ink border border-line font-ui;
+    padding: 4px 9px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.68,-0.55,0.265,1.55), transform 0.25s cubic-bezier(0.68,-0.55,0.265,1.55);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    z-index: 20;
+  }
+  /* arrow under the bubble */
+  [data-tooltip]::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 3px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    border: 5px solid transparent;
+    border-bottom: 0;
+    @apply border-t-line;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.68,-0.55,0.265,1.55), transform 0.25s cubic-bezier(0.68,-0.55,0.265,1.55);
+    z-index: 21;
+  }
+  [data-tooltip]:hover::after,
+  [data-tooltip]:focus-visible::after,
+  [data-tooltip]:hover::before,
+  [data-tooltip]:focus-visible::before {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  /* scroll reveal, toggled by the observer in Layout.astro */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  [data-reveal].is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] { opacity: 1; transform: none; }
+  }
+
+  /* dashed content box used across section cards, with hover lift */
+  .dash-box {
+    @apply border border-dashed border-line rounded-lg2 transition-all duration-300 ease-out;
+  }
+  .dash-box:hover {
+    @apply border-line-hover -translate-y-0.5;
+    box-shadow: 0 8px 20px -8px rgba(0,0,0,0.5);
+  }
+}
