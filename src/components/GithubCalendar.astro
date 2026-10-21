@@ -1,6 +1,6 @@
 ---
 const GITHUB_USERNAME = 'YoelLazarte';
-const levels = ['#262626', '#4a4a4a', '#7a7a7a', '#b0b0b0', '#ebebeb'];
+const levels = ['#383838', '#606060', '#8C8C8C', '#BABABA', '#EBEBEB'];
 ---
 
 <div class="dash-box p-3.5 mt-1" data-username={GITHUB_USERNAME} data-reveal>
@@ -14,6 +14,8 @@ const levels = ['#262626', '#4a4a4a', '#7a7a7a', '#b0b0b0', '#ebebeb'];
 
   <!-- 53 week columns, scrolls horizontally on narrow screens and starts scrolled to the latest week -->
   <div id="gh-cal-scroll" class="overflow-x-auto pb-1">
+    <div id="gh-cal-tip" role="tooltip" hidden
+      class="fixed z-50 pointer-events-none -translate-x-1/2 -translate-y-full bg-surface-card text-ink border border-line rounded-xl2 px-2 py-1 font-ui text-[0.7rem] whitespace-nowrap shadow-[0_6px_16px_rgba(0,0,0,0.25)] after:content-[''] after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:border-[5px] after:border-transparent after:border-t-line"></div>
     <div id="gh-cal-grid" class="grid grid-rows-7 grid-flow-col auto-cols-[10px] gap-[3px] min-h-[88px] w-max" aria-live="polite">
       <p class="font-body text-[0.8rem] text-ink-dim row-span-7">Cargando contribuciones…</p>
     </div>
@@ -31,6 +33,26 @@ const levels = ['#262626', '#4a4a4a', '#7a7a7a', '#b0b0b0', '#ebebeb'];
   const scroller = document.getElementById('gh-cal-scroll');
   const total = document.getElementById('gh-cal-total');
   const username = document.querySelector('[data-username]')?.getAttribute('data-username');
+  const tip = document.getElementById('gh-cal-tip');
+  // Lives in <body> because the card's hover transform would break position: fixed
+  if (tip) document.body.appendChild(tip);
+  const dateFmt = new Intl.DateTimeFormat('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
+  const formatDate = (iso) => dateFmt.format(new Date(iso + 'T00:00:00'));
+
+  // One shared tooltip, positioned over whichever day cell is hovered
+  container?.addEventListener('mouseover', (e) => {
+    const cell = e.target.closest('[data-tip]');
+    if (!cell || !tip) return;
+    const r = cell.getBoundingClientRect();
+    tip.textContent = cell.dataset.tip;
+    tip.style.left = `${r.left + r.width / 2}px`;
+    tip.style.top = `${r.top - 8}px`;
+    tip.hidden = false;
+  });
+  container?.addEventListener('mouseleave', () => { if (tip) tip.hidden = true; });
+  const hideTip = () => { if (tip) tip.hidden = true; };
+  scroller?.addEventListener('scroll', hideTip);
+  window.addEventListener('scroll', hideTip, { passive: true });
 
   async function loadCalendar() {
     if (!container || !username) return;
@@ -51,7 +73,7 @@ const levels = ['#262626', '#4a4a4a', '#7a7a7a', '#b0b0b0', '#ebebeb'];
         const el = document.createElement('div');
         el.className = 'w-2.5 h-2.5 rounded-sm2';
         el.style.background = levels[day.level] ?? levels[0];
-        el.title = `${day.count} contribuciones — ${day.date}`;
+        el.dataset.tip = `${day.count} ${day.count === 1 ? 'contribución' : 'contribuciones'} · ${formatDate(day.date)}`;
         container.appendChild(el);
       });
 

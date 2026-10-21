@@ -38,10 +38,16 @@ const qrSvg = await QRCode.toString(WHATSAPP_URL, {
         <Icon name="arrow-right" size={11} />
       </a>
 
-      <p class="flex items-center gap-1 font-ui text-[0.8rem] text-ink-muted m-0">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-7.5 7-12.5a7 7 0 10-14 0C5 14.5 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-        Buenos Aires, Argentina
-      </p>
+      <div class="flex items-center flex-wrap gap-x-3 gap-y-1 font-ui text-[0.8rem] text-ink-muted">
+        <p class="flex items-center gap-1 m-0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-7.5 7-12.5a7 7 0 10-14 0C5 14.5 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          Buenos Aires, Argentina
+        </p>
+        <p class="flex items-center gap-1 m-0" data-tooltip="Mi hora local">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 2h4M12 14l3-3"/><circle cx="12" cy="14" r="8"/></svg>
+          <span id="hero-time" class="font-mono tabular-nums">--:--</span>
+        </p>
+      </div>
     </div>
   </div>
 
@@ -101,4 +107,10 @@ const qrSvg = await QRCode.toString(WHATSAPP_URL, {
     faces.forEach((f) => { f.hidden = !f.hidden; });
     toggle.setAttribute('aria-pressed', String(toggle.getAttribute('aria-pressed') !== 'true'));
   });
+
+  const heroTime = document.getElementById('hero-time');
+  const fmt = new Intl.DateTimeFormat('es-AR', { timeZone: 'America/Argentina/Buenos_Aires', hour: '2-digit', minute: '2-digit', hour12: false });
+  const updateTime = () => { if (heroTime) heroTime.textContent = `${fmt.format(new Date())} hs`; };
+  updateTime();
+  setInterval(updateTime, 30_000);
 </script>

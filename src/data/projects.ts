@@ -17,7 +17,10 @@ export interface ProjectData {
   liveLabel?: string;
   demoWarning?: boolean;
   isUnderDevelopment?: boolean;
+  /** private repo: shows a badge and hides the "Código" link */
   isPrivate?: boolean;
+  /** short stats badge, e.g. "+500 usuarios" */
+  stats?: string;
   status: 'Terminado' | 'Pausado' | 'Prototipo';
 }
 

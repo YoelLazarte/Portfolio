@@ -6,6 +6,7 @@
 
 @layer base {
   html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 50px; }
   body { @apply bg-surface text-ink-secondary font-body antialiased m-0; }
   a { @apply text-inherit no-underline; }
   img { @apply max-w-full block; }
@@ -45,8 +46,25 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     z-index: 20;
   }
+  /* arrow under the bubble */
+  [data-tooltip]::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 3px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    border: 5px solid transparent;
+    border-bottom: 0;
+    @apply border-t-line;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.68,-0.55,0.265,1.55), transform 0.25s cubic-bezier(0.68,-0.55,0.265,1.55);
+    z-index: 21;
+  }
   [data-tooltip]:hover::after,
-  [data-tooltip]:focus-visible::after {
+  [data-tooltip]:focus-visible::after,
+  [data-tooltip]:hover::before,
+  [data-tooltip]:focus-visible::before {
     opacity: 1;
     transform: translateX(-50%) scale(1);
   }

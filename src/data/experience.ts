@@ -2,7 +2,11 @@ export interface ExperienceEntry {
   company: string;
   role: string;
   dates: string;
-  status: 'present' | 'past';
+  status: 'present' | 'past' | 'future';
+  /** e.g. 'Buenos Aires · Remoto' */
+  location?: string;
+  /** path under /public, e.g. '/logos/levn.png'. Falls back to the company initial */
+  logoUrl?: string;
   description: string[];
   links?: { label: string; url: string }[];
 }

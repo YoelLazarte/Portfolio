@@ -10,9 +10,30 @@ import { experienceEntries } from '../data/experience';
 
   <div class="mb-6">
     {experienceEntries.map((entry, i) => (
-      <ExperienceCard entry={entry} isLast={i === experienceEntries.length - 1} />
+      <ExperienceCard entry={entry} index={i} isExpanded={i === 0} isLast={i === experienceEntries.length - 1} />
     ))}
   </div>
 
   <GithubCalendar />
 </section>
+
+<script>
+  // Accordion: only one experience card open at a time
+  const cards = document.querySelectorAll<HTMLElement>('[data-exp-card]');
+
+  function setExpanded(card: HTMLElement, open: boolean) {
+    card.querySelector('button')?.setAttribute('aria-expanded', String(open));
+    card.querySelector('[data-exp-chevron]')?.classList.toggle('rotate-180', open);
+    const panel = card.querySelector('[data-exp-panel]');
+    panel?.classList.toggle('grid-rows-[1fr]', open);
+    panel?.classList.toggle('grid-rows-[0fr]', !open);
+    panel?.toggleAttribute('inert', !open);
+  }
+
+  cards.forEach((card) => {
+    card.querySelector('button')?.addEventListener('click', () => {
+      const willOpen = card.querySelector('button')?.getAttribute('aria-expanded') !== 'true';
+      cards.forEach((c) => setExpanded(c, c === card && willOpen));
+    });
+  });
+</script>

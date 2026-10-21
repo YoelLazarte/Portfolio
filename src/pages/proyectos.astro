@@ -11,7 +11,12 @@ import { allProjects } from '../data/projects';
   <Navbar />
   <main>
     <section class="max-w-shell mx-auto px-[18px] md:px-[25px] pt-8">
-      <SectionTitle>Todos los proyectos</SectionTitle>
+      <div class="flex items-center justify-between mb-1">
+        <SectionTitle>Todos los proyectos</SectionTitle>
+        <a href="/#proyectos" class="group inline-flex items-center gap-1.5 font-ui text-[0.78rem] font-medium bg-surface-card border border-line rounded-sm2 px-3.5 py-1.5 shadow-sm2 hover:border-line-hover transition-colors duration-200">
+          <span class="transition-transform duration-300 group-hover:-translate-x-0.5">←</span> Volver
+        </a>
+      </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         {allProjects.map(p => <ProjectCard project={p} />)}
       </div>

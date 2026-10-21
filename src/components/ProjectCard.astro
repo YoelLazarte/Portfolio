@@ -27,12 +27,31 @@ const statusClass = {
       <h3 class="font-ui text-[1.1rem] font-semibold text-ink m-0">{project.name}</h3>
       <span class={`font-ui text-[0.65rem] font-medium px-2 py-0.5 rounded-full ${statusClass}`}>{project.status}</span>
     </div>
+    {(project.isUnderDevelopment || project.isPrivate || project.stats) && (
+      <div class="flex flex-wrap gap-1.5 mb-2">
+        {project.isUnderDevelopment && (
+          <span class="inline-flex items-center gap-1 font-ui text-[0.65rem] font-medium text-state-future border border-state-future/30 rounded-lg2 px-1.5 py-0.5">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 20h20M5 20l3-14h8l3 14M9 10h6M8 15h8" /></svg>
+            En desarrollo
+          </span>
+        )}
+        {project.isPrivate && (
+          <span class="inline-flex items-center gap-1 font-ui text-[0.65rem] font-medium text-ink-tertiary border border-line rounded-lg2 px-1.5 py-0.5">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 018 0v4" /></svg>
+            Proyecto privado
+          </span>
+        )}
+        {project.stats && (
+          <span class="font-ui text-[0.65rem] font-semibold tracking-[0.3px] text-ink bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] border border-line rounded-lg2 px-1.5 py-0.5">{project.stats}</span>
+        )}
+      </div>
+    )}
     <p class="font-body text-[0.85rem] text-ink-secondary leading-relaxed mb-3">{project.desc}</p>
     <div class="flex flex-wrap gap-1.5 mb-3.5">
       {project.tech.map(t => <span class="font-mono text-[0.7rem] text-ink-tertiary bg-surface-elevated rounded-md2 px-2 py-0.5">{t}</span>)}
     </div>
     <div class="flex gap-3.5 mt-auto">
-      {project.github && (
+      {project.github && !project.isPrivate && (
         <a href={project.github} target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 font-ui text-[0.78rem] font-medium text-ink-dim hover:text-ink transition-colors duration-200">
           <Icon name="github" size={13} /> Código
         </a>
