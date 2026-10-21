@@ -11,7 +11,7 @@ import { socialLinks } from '../data/socialLinks';
   <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
     {socialLinks.map(s => (
       <a href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel="noopener"
-        class="dash-box flex items-center gap-2 p-3.5 font-ui text-[0.85rem] text-ink-secondary hover:text-ink">
+        data-reveal class="dash-box flex items-center gap-2 p-3.5 font-ui text-[0.85rem] text-ink-secondary hover:text-ink">
         <Icon name={s.icon} size={16} />
         <span>{s.name}</span>
       </a>

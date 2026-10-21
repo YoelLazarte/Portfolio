@@ -1,22 +1,23 @@
 ---
 const links = [
-  { href: '/#proyectos', label: 'Proyectos' },
   { href: '/#experiencia', label: 'Experiencia' },
+  { href: '/#proyectos', label: 'Proyectos' },
+  { href: '/#contacto', label: 'Contacto' },
   { href: '/cv', label: 'CV' },
 ];
 ---
 
-<header class="sticky top-0 z-[1000] bg-surface/60 backdrop-blur-md">
+<header class="sticky top-0 z-[1000] bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-300" id="site-header">
   <nav class="max-w-shell mx-auto px-[18px] md:px-[18px] py-3.5 flex items-center gap-4">
     <a href="/" class="font-ui font-bold text-[0.95rem] text-ink mr-auto">YOEL<span class="text-brand-blue">.</span></a>
 
     <ul class="hidden sm:flex gap-4 list-none m-0 p-0">
       {links.map(l => (
-        <li><a href={l.href} class="font-ui text-[0.85rem] font-medium text-ink-secondary hover:text-ink transition-colors duration-200">{l.label}</a></li>
+        <li><a href={l.href} data-nav-link class="font-ui text-[0.85rem] font-medium text-ink-secondary hover:text-ink transition-colors duration-200 aria-[current=true]:text-ink">{l.label}</a></li>
       ))}
     </ul>
 
-    <a href="https://github.com/YoelLazarte/portfolio" target="_blank" rel="noopener"
+    <a href="https://github.com/YoelLazarte/Portfolio" target="_blank" rel="noopener"
       class="hidden sm:inline-flex items-center gap-1.5 bg-surface-card border border-line rounded-full px-3 py-1.5 font-ui text-[0.8rem] font-medium text-ink hover:border-line-hover transition-colors duration-200">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="text-brand-amber"><path d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.787 1.401 8.168L12 19.771l-7.335 3.395 1.401-8.168L.132 9.211l8.2-1.193z"/></svg>
       Star
@@ -24,24 +25,62 @@ const links = [
 
     <button id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú"
       class="sm:hidden flex flex-col gap-1 bg-transparent border-none p-1.5 cursor-pointer">
-      <span class="w-[18px] h-[1.5px] bg-ink block"></span>
-      <span class="w-[18px] h-[1.5px] bg-ink block"></span>
+      <span class="w-[18px] h-[1.5px] bg-ink block transition-transform duration-200"></span>
+      <span class="w-[18px] h-[1.5px] bg-ink block transition-transform duration-200"></span>
     </button>
   </nav>
 
-  <div id="mobile-menu" class="hidden flex-col gap-0.5 px-5 pb-4">
+  <div id="mobile-menu" class="hidden flex-col gap-0.5 px-5 pb-4 sm:!hidden">
     {links.map(l => (
-      <a href={l.href} class="font-ui text-[0.9rem] text-ink-secondary py-2.5 border-t border-line/40">{l.label}</a>
+      <a href={l.href} data-nav-link class="font-ui text-[0.9rem] text-ink-secondary py-2.5 border-t border-line/40 aria-[current=true]:text-ink">{l.label}</a>
     ))}
   </div>
 </header>
 
 <script>
+  const header = document.getElementById('site-header');
   const btn = document.getElementById('menu-btn');
   const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => {
-    const open = menu?.classList.toggle('flex');
-    menu?.classList.toggle('hidden');
-    btn.setAttribute('aria-expanded', String(!!open));
-  });
+  const bars = btn?.querySelectorAll('span');
+
+  function setMenu(open: boolean) {
+    menu?.classList.toggle('flex', open);
+    menu?.classList.toggle('hidden', !open);
+    btn?.setAttribute('aria-expanded', String(open));
+    btn?.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    if (bars) {
+      bars[0].style.transform = open ? 'translateY(2.75px) rotate(45deg)' : '';
+      bars[1].style.transform = open ? 'translateY(-2.75px) rotate(-45deg)' : '';
+    }
+  }
+
+  btn?.addEventListener('click', () => setMenu(btn.getAttribute('aria-expanded') !== 'true'));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+
+  // Border under the header once the page scrolls
+  const onScroll = () => {
+    const scrolled = window.scrollY > 8;
+    header?.classList.toggle('border-line/40', scrolled);
+    header?.classList.toggle('border-transparent', !scrolled);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Highlight the nav link of the section currently in view
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+  const sections = Array.from(navLinks)
+    .map((a) => a.hash && document.querySelector<HTMLElement>(a.hash))
+    .filter((s): s is HTMLElement => !!s);
+
+  if (sections.length) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        navLinks.forEach((a) => a.setAttribute('aria-current', String(a.hash === `#${e.target.id}`)));
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach((s) => io.observe(s));
+  } else {
+    navLinks.forEach((a) => a.setAttribute('aria-current', String(!a.hash && a.pathname === location.pathname)));
+  }
 </script>

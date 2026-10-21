@@ -11,7 +11,9 @@ const {
   description = 'Desarrollo productos digitales, sistemas web y automatizaciones para convertir ideas y procesos en soluciones reales. Vue.js, React, Laravel, n8n.',
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// Astro.site is undefined until `site` is set in astro.config.mjs — fall back to the request URL
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const ogImage = new URL('/preview.png', Astro.site ?? Astro.url);
 ---
 
 <!doctype html>
@@ -31,10 +33,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content={ogImage} />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#0b0d0e" />
 
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
@@ -49,5 +54,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <slot />
+
+    <script>
+      // Fade-in on scroll for any element marked with [data-reveal]
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -60px 0px' });
+      targets.forEach((t) => io.observe(t));
+    </script>
   </body>
 </html>

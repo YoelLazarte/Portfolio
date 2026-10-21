@@ -1,10 +1,29 @@
-<footer class="max-w-shell mx-auto px-[18px] py-[30px] pb-10 text-center">
+---
+import Icon from './Icon.astro';
+import { socialLinks } from '../data/socialLinks';
+---
+
+<footer class="max-w-shell mx-auto px-[18px] py-[30px] pb-10 text-center border-t border-dashed border-line/60 mt-10">
+  <div class="flex items-center justify-center gap-2 mb-4">
+    {socialLinks.map(s => (
+      <a href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel="noopener" aria-label={s.name} data-tooltip={s.name}
+        class="w-8 h-8 rounded-full flex items-center justify-center text-ink-dim hover:text-ink hover:bg-surface-card transition-colors duration-200">
+        <Icon name={s.icon} size={14} />
+      </a>
+    ))}
+  </div>
+
   <p class="font-ui italic text-[0.85rem] text-ink-dim mb-3">"Construido con Astro, café y paciencia."</p>
   <div class="flex items-center justify-center gap-3.5 flex-wrap font-mono text-[0.7rem] text-ink-ghost">
-    <span>Diseñado y hecho por Yoel Lazarte</span>
+    <span>© {new Date().getFullYear()} · Diseñado y hecho por Yoel Lazarte</span>
     <span id="clock" class="tabular-nums">—:—:— ART</span>
   </div>
 </footer>
+
+<button id="back-to-top" aria-label="Volver arriba"
+  class="fixed bottom-5 right-5 z-[999] w-9 h-9 rounded-full flex items-center justify-center bg-surface-card border border-line text-ink-secondary shadow-btn hover:text-ink hover:border-line-hover opacity-0 pointer-events-none translate-y-2 transition-all duration-300">
+  <span class="-rotate-90 flex"><Icon name="arrow-right" size={15} /></span>
+</button>
 
 <script>
   const clock = document.getElementById('clock');
@@ -15,4 +34,15 @@
   }
   tick();
   setInterval(tick, 1000);
+
+  const toTop = document.getElementById('back-to-top');
+  const onScroll = () => {
+    const show = window.scrollY > 600;
+    toTop?.classList.toggle('opacity-0', !show);
+    toTop?.classList.toggle('pointer-events-none', !show);
+    toTop?.classList.toggle('translate-y-2', !show);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  toTop?.addEventListener('click', () => window.scrollTo({ top: 0 }));
 </script>

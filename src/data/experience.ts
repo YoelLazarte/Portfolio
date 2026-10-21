@@ -24,7 +24,7 @@ export const experienceEntries: ExperienceEntry[] = [
   {
     company: 'Grownest',
     role: 'Analista de Marketing & AI Automation',
-    dates: '2026 — 2025',
+    dates: '2025 — 2026',
     status: 'past',
     description: [
       'Gestión y optimización de pauta en Meta Ads y Google Ads.',

@@ -1,18 +1,36 @@
 ---
 const GITHUB_USERNAME = 'YoelLazarte';
+const levels = ['#262626', '#4a4a4a', '#7a7a7a', '#b0b0b0', '#ebebeb'];
 ---
 
-<div class="mt-1" data-username={GITHUB_USERNAME}>
-  <p class="font-ui text-xs text-ink-dim mb-2.5">Actividad en GitHub</p>
-  <div id="gh-cal-grid" class="flex flex-wrap gap-[3px] min-h-[60px]" aria-live="polite">
-    <p class="font-body text-[0.8rem] text-ink-dim">Cargando contribuciones…</p>
+<div class="dash-box p-3.5 mt-1" data-username={GITHUB_USERNAME} data-reveal>
+  <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+    <p class="font-ui text-xs text-ink-dim m-0">
+      <span id="gh-cal-total" class="text-ink-secondary font-medium">—</span> contribuciones en el último año
+    </p>
+    <a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener"
+      class="font-mono text-[0.7rem] text-ink-dim hover:text-ink transition-colors duration-200">@{GITHUB_USERNAME} ↗</a>
+  </div>
+
+  <!-- 53 week columns, scrolls horizontally on narrow screens and starts scrolled to the latest week -->
+  <div id="gh-cal-scroll" class="overflow-x-auto pb-1">
+    <div id="gh-cal-grid" class="grid grid-rows-7 grid-flow-col auto-cols-[10px] gap-[3px] min-h-[88px] w-max" aria-live="polite">
+      <p class="font-body text-[0.8rem] text-ink-dim row-span-7">Cargando contribuciones…</p>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-1 mt-2 font-ui text-[0.65rem] text-ink-dim">
+    <span class="mr-1">Menos</span>
+    {levels.map(c => <span class="w-2.5 h-2.5 rounded-sm2" style={`background:${c}`}></span>)}
+    <span class="ml-1">Más</span>
   </div>
 </div>
 
-<script>
+<script is:inline define:vars={{ levels }}>
   const container = document.getElementById('gh-cal-grid');
+  const scroller = document.getElementById('gh-cal-scroll');
+  const total = document.getElementById('gh-cal-total');
   const username = document.querySelector('[data-username]')?.getAttribute('data-username');
-  const levels = ['#383838', '#606060', '#8C8C8C', '#BABABA', '#EBEBEB'];
 
   async function loadCalendar() {
     if (!container || !username) return;
@@ -20,18 +38,27 @@ const GITHUB_USERNAME = 'YoelLazarte';
       const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      const contributions: { date: string; count: number; level: number }[] = data.contributions || [];
-      const recent = contributions.slice(-91);
+      const contributions = data.contributions || [];
       container.innerHTML = '';
-      recent.forEach((day) => {
+
+      // Pad the first column so each row lines up with a weekday (Sun → Sat)
+      const firstDay = contributions.length ? new Date(contributions[0].date + 'T00:00:00').getDay() : 0;
+      for (let i = 0; i < firstDay; i++) container.appendChild(document.createElement('div'));
+
+      let sum = 0;
+      contributions.forEach((day) => {
+        sum += day.count;
         const el = document.createElement('div');
-        el.className = 'w-2.5 h-2.5 rounded-sm2 relative';
+        el.className = 'w-2.5 h-2.5 rounded-sm2';
         el.style.background = levels[day.level] ?? levels[0];
-        el.setAttribute('data-tooltip', `${day.count} contribuciones — ${day.date}`);
+        el.title = `${day.count} contribuciones — ${day.date}`;
         container.appendChild(el);
       });
+
+      if (total) total.textContent = (data.total?.lastYear ?? sum).toLocaleString('es-AR');
+      if (scroller) scroller.scrollLeft = scroller.scrollWidth;
     } catch {
-      container.innerHTML = '<p class="font-body text-[0.8rem] text-ink-dim">No se pudo cargar el calendario ahora mismo.</p>';
+      container.innerHTML = '<p class="font-body text-[0.8rem] text-ink-dim row-span-7">No se pudo cargar el calendario ahora mismo.</p>';
     }
   }
 

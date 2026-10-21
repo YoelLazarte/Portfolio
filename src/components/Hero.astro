@@ -1,6 +1,15 @@
 ---
 import Icon from './Icon.astro';
 import { heroSocialLinks } from '../data/socialLinks';
+import QRCode from 'qrcode';
+
+const WHATSAPP_URL = 'https://wa.me/5491158486166';
+// Rendered at build time, so the QR is a real scannable code with zero client JS
+const qrSvg = await QRCode.toString(WHATSAPP_URL, {
+  type: 'svg',
+  margin: 2,
+  color: { dark: '#ffffff', light: '#1a1b1c' },
+});
 ---
 
 <section class="max-w-shell mx-auto px-[18px] md:px-[25px] pt-8 pb-2" id="top">
@@ -8,26 +17,11 @@ import { heroSocialLinks } from '../data/socialLinks';
     <!-- Avatar / QR toggle -->
     <div class="relative w-[120px] h-[120px] flex-shrink-0">
       <div class="avatar-face absolute inset-0 rounded-lg border border-line overflow-hidden" data-face="avatar">
-        <!-- Placeholder monogram avatar — swap this <svg> for a real <img src="/images/profile/avatar.jpg"> when ready -->
-        <svg viewBox="0 0 180 180" width="100%" height="100%">
-          <rect width="180" height="180" fill="#1a1b1c" />
-          <text x="90" y="90" font-family="Figtree, sans-serif" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">YL</text>
-        </svg>
+        <img src="/yoel.jpg" alt="Foto de Yoel Lazarte" width="120" height="120" class="w-full h-full object-cover" />
       </div>
-      <div class="avatar-face absolute inset-0 rounded-lg border border-line overflow-hidden" data-face="qr" hidden>
-        <!-- Placeholder QR pattern — swap for a real <img src="/images/profile/qr-code.png"> when ready -->
-        <svg viewBox="0 0 120 120" width="100%" height="100%">
-          <rect width="120" height="120" fill="#1a1b1c" />
-          <g fill="#ffffff">
-            {Array.from({ length: 7 }).map((_, row) =>
-              Array.from({ length: 7 }).map((_, col) => (
-                ((row + col * 3) % 5 < 2) && <rect x={32 + col * 8} y={32 + row * 8} width="7" height="7" />
-              ))
-            )}
-          </g>
-        </svg>
-      </div>
-      <button id="qr-toggle" data-tooltip="Ver QR" aria-label="Mostrar código QR"
+      <div class="avatar-face absolute inset-0 rounded-lg border border-line overflow-hidden [&>svg]:w-full [&>svg]:h-full"
+        data-face="qr" title="Escaneá para escribirme por WhatsApp" hidden set:html={qrSvg}></div>
+      <button id="qr-toggle" data-tooltip="QR de WhatsApp" aria-label="Alternar entre foto y código QR" aria-pressed="false"
         class="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-surface-card border border-line text-ink-secondary flex items-center justify-center cursor-pointer hover:border-line-hover hover:text-ink transition-colors duration-200">
         <Icon name="qrcode" size={13} />
       </button>
@@ -39,7 +33,7 @@ import { heroSocialLinks } from '../data/socialLinks';
 
       <a href="https://levn.com.ar" target="_blank" rel="noopener" data-tooltip="Agencia propia"
         class="inline-flex items-center gap-1.5 bg-state-activebg border border-state-active/30 text-state-active rounded-full px-2.5 py-1 font-ui text-xs font-medium mb-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-state-active shadow-[0_0_0_3px_rgba(2,255,103,0.5)]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-state-active shadow-[0_0_0_3px_rgba(2,255,103,0.5)] animate-pulse-dot"></span>
         Construyendo LEVN
         <Icon name="arrow-right" size={11} />
       </a>
@@ -51,22 +45,22 @@ import { heroSocialLinks } from '../data/socialLinks';
     </div>
   </div>
 
-  <ul class="list-none m-0 mb-5 p-0 ">
-    <li class="inline-flex items-center">
-      <span class="flex-shrink w-2.5 h-2.5 mt-[6px] bg-stone-400 rounded-full"></span>
-      <span class="ml-4">
+  <ul class="list-none m-0 mb-5 p-0 flex flex-col gap-1.5 font-body text-[0.9rem] text-ink-secondary leading-relaxed">
+    <li class="flex items-start">
+      <span class="flex-shrink-0 w-1.5 h-1.5 mt-[9px] bg-ink-dim rounded-full"></span>
+      <span class="ml-3">
         Desarrollador Full Stack Jr. con experiencia en proyectos reales.
       </span>
     </li>
-    <li class="inline-flex items-center">
-      <span class="flex-shrink w-2.5 h-2.5 mt-[6px] bg-stone-400 rounded-full"></span>
-      <span class="ml-4">
+    <li class="flex items-start">
+      <span class="flex-shrink-0 w-1.5 h-1.5 mt-[9px] bg-ink-dim rounded-full"></span>
+      <span class="ml-3">
         Me gusta resolver los problemas que aparecen en el camino hacia el desarrollo de un producto.
       </span>
     </li>
-    <li class="inline-flex items-center">
-      <span class="flex-shrink w-2.5 h-2.5 mt-[6px] bg-stone-400 rounded-full"></span>
-      <span class="ml-4">
+    <li class="flex items-start">
+      <span class="flex-shrink-0 w-1.5 h-1.5 mt-[9px] bg-ink-dim rounded-full"></span>
+      <span class="ml-3">
         Hoy construyendo LEVN, además de experiencia freelance y en Grownest.
       </span>
     </li>
@@ -88,13 +82,12 @@ import { heroSocialLinks } from '../data/socialLinks';
     </div>
   </div>
 
-  <!-- Functional cards (previously Twitter/Discord placeholders — swapped for real, working links) -->
   <div class="grid grid-cols-1 xs:grid-cols-2 gap-2.5">
     <a href="https://linkedin.com/in/yoel-lazarte/" target="_blank" rel="noopener" class="dash-box p-3.5 text-ink-secondary hover:text-ink">
       <p class="font-ui text-[0.7rem] font-semibold text-ink-dim uppercase tracking-wide m-0 mb-1">LinkedIn</p>
       <p class="font-body text-[0.78rem] leading-snug m-0">Seguime para ver en qué estoy trabajando.</p>
     </a>
-    <a href="https://wa.me/5491158486166" target="_blank" rel="noopener" class="dash-box p-3.5 flex items-center justify-center gap-2 font-ui text-[0.78rem] font-medium text-ink-secondary hover:text-ink">
+    <a href={WHATSAPP_URL} target="_blank" rel="noopener" class="dash-box p-3.5 flex items-center justify-center gap-2 font-ui text-[0.78rem] font-medium text-ink-secondary hover:text-ink">
       <Icon name="whatsapp" size={16} />
       <span>Hablemos por WhatsApp</span>
     </a>
@@ -106,5 +99,6 @@ import { heroSocialLinks } from '../data/socialLinks';
   const faces = document.querySelectorAll<HTMLElement>('.avatar-face');
   toggle?.addEventListener('click', () => {
     faces.forEach((f) => { f.hidden = !f.hidden; });
+    toggle.setAttribute('aria-pressed', String(toggle.getAttribute('aria-pressed') !== 'true'));
   });
 </script>
